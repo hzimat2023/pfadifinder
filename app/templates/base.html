@@ -1,0 +1,15 @@
+<!doctype html>
+<html>
+<head>
+{% if title %}
+<title>{{ title }} - Pfadifinder</title>
+{% else %}
+<title>Welcome to Pfadifinder</title>
+{% endif %}
+</head>
+<body>
+<div>Pfadifinder: <a href="/index">Home</a></div>
+<hr>
+{% block content %}{% endblock %}
+</body>
+</html>
