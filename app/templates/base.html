@@ -1,15 +1,75 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-{% if title %}
-<title>{{ title }} - Pfadifinder</title>
-{% else %}
-<title>Welcome to Pfadifinder</title>
-{% endif %}
+    <!-- Required meta tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/css/bootstrap.min.css') }}">
+    
+    
+    <link rel="stylesheet" href="https://bootswatch.com/5/yeti/bootstrap.min.css">  
+
+    <!-- Fontawesomee -->
+    <script src="https://kit.fontawesome.com/8744ee2cf9.js" crossorigin="anonymous"></script>
+
+    <!-- Custem CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    
+     <!-- Titel -->
+    {% if title %}
+        <title>{{ title }} - Pfadifinder+</title>
+        {% else %}
+        <title>Welcome to Pfadifinder</title>
+    {% endif %}
+    
+    <!-- Head for Style -->
+    {% block head %} {% endblock %}
+
+
+    
 </head>
 <body>
-<div>Pfadifinder: <a href="/index">Home</a></div>
-<hr>
-{% block content %}{% endblock %}
+    Padifinder:
+     <a href="{{ url_for('index') }}">Home</a></div>
+     <a href="{{ url_for('login') }}">login</a></div>
+    <hr>
+   
+
+    <div class="row" style= "margin-top: 50px;">
+        <div class="col"></div>
+        <div class="col">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+            {% for message in messages %}
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+        </div>
+        <div class="col"></div>
+      </div>
+
+        
+
+
+
+    {% block content %}{% endblock %}
+        
+ 
+
+    <!-- Bootstrap JavaScript -->
+    <script src="{{ url_for('static', filename='bootstrap/js/bootstrap.min.js') }}"></script>
+
 </body>
 </html>
+
+
