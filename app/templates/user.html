@@ -1,25 +1,58 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
-
-
 <div class="container">
     <h1>Welcome to the Dashboard, {{ current_user.username }}!</h1>
-</br>
-    <h2>User Information</h2>
-    <p><strong>User-ID:</strong>{{ user.id }}</p>
-    <p><strong>Username:</strong> {{ current_user.username }}</p>
-    <p><strong>Vorname:</strong> {{ current_user.vorname }}</p>
-    <p><strong>Nachname:</strong> {{ current_user.nachname }}</p>
-    <p><strong>Email:</strong> {{ current_user.email }}</p>
     <hr>
+    <h2>User Information</h2>
+    <div class="row">
+        <div class="col-md-4">
+            <strong>User-ID:</strong>
+        </div>
+        <div class="col-md-8">
+            {{ user.id }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Username:</strong>
+        </div>
+        <div class="col-md-8">
+            {{ current_user.username }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Vorname:</strong>
+        </div>
+        <div class="col-md-8">
+            {{ current_user.vorname }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Nachname:</strong>
+        </div>
+        <div class="col-md-8">
+            {{ current_user.nachname }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <strong>Email:</strong>
+        </div>
+        <div class="col-md-8">
+            {{ current_user.email }}
+        </div>
+    </div>
+</div>
 
+<div class="container">
+    <hr>
     <h2>Pfadikinder</h2>
-    <ul>
+    <ul class="list-group">
         {% for pfadikind in current_user.pfadikinder %}
-            <li>
+            <li class="list-group-item">
                 <strong>Pfadiname:</strong> {{ pfadikind.pfadiname }}<br>
                 <strong>Vegetarisch:</strong> {% if pfadikind.vegetarisch %}Ja{% else %}Nein{% endif %}<br>
                 <strong>Vorname:</strong> {{ pfadikind.vorname }}<br>
@@ -29,13 +62,8 @@
                 <strong>Telefon privat:</strong> {{ pfadikind.telefonprivat }}<br>
                 <strong>Telefon beruflich:</strong> {{ pfadikind.telefonberuflich }}<br>
                 <strong>Allergien/Unverträglichkeiten:</strong> {{ pfadikind.allergien_unvertraeglichkeiten }}<br>
-            </br>
             </li>
         {% endfor %}
     </ul>
-
-
-
 </div>
-
 {% endblock %}

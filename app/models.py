@@ -45,3 +45,11 @@ class Pfadikind(db.Model):
 
     def __repr__(self):
         return f'<Pfadikind {self.vorname} {self.nachname}>'
+
+    
+class Pfadilager(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    datum = db.Column(db.String(50), nullable=False)
+    
+

@@ -1,10 +1,10 @@
 
 from app import db
 from app import app
-from app.forms import LoginForm, PfadikindForm, RegistrationForm
+from app.forms import LoginForm, PfadikindForm, RegistrationForm, PfadiLagerForm
 from flask import Flask, flash, render_template, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Pfadikind 
+from app.models import User, Pfadikind, Pfadilager
 from werkzeug.urls import url_parse
 
 
@@ -12,8 +12,10 @@ from werkzeug.urls import url_parse
 @app.route('/index')
 @login_required  
 def index():
-    user = current_user  
-    return render_template('index.html', title='Home', user=user)
+    user = current_user 
+    pfadilager_entries = Pfadilager.query.all()
+
+    return render_template('index.html', title='Home', user=user, pfadilager_entries=pfadilager_entries)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -111,3 +113,31 @@ def register_pfadikind():
         flash('Pfadikind wurde erfolgreich hinzugefügt!')
         return redirect(url_for('index'))
     return render_template('register_pfadikind.html', title='Pfadikind registrieren', form=form)
+
+
+
+@app.route('/create_pfadilager', methods=['GET', 'POST'])
+def create_pfadilager():
+    form = PfadiLagerForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        datum = form.datum.data
+        
+        new_pfadilager = Pfadilager(name=name, datum=datum)
+        db.session.add(new_pfadilager)
+        db.session.commit()
+        
+        flash('Pfadilager erfolgreich erstellt.', 'success')
+        return redirect(url_for('create_pfadilager'))  
+    
+    return render_template('create_pfadilager.html', form=form)
+
+
+
+
+@app.route('/pfadilager')
+def pfadilager():
+    
+    lager_list = Pfadilager.query.all()
+
+    return render_template('pfadilager.html', lager_list=lager_list)

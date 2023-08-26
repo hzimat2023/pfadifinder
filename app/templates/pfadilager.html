@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">PfadiLager Liste</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Datum</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for lager in lager_list %}
+                <tr>
+                    <td>{{ lager.id }}</td>
+                    <td>{{ lager.name }}</td>
+                    <td>{{ lager.datum }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

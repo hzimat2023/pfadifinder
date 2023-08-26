@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, TextAreaField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, DateField, TextAreaField, SubmitField, SelectField
 from wtforms.validators import DataRequired, Length, Email, ValidationError, EqualTo
 from app.models import User
 from wtforms.validators import DataRequired
@@ -45,3 +45,10 @@ class PfadikindForm(FlaskForm):
     telefonberuflich = StringField('Telefon beruflich')
     allergien_unvertraeglichkeiten = TextAreaField('Allergien/Unverträglichkeiten')
     submit = SubmitField('Pfadikind hinzufügen')
+
+class PfadiLagerForm(FlaskForm):
+    name = StringField('Name des Lagers')
+    datum = StringField('Datum des Lagers')
+    submit = SubmitField('Submit')  
+
+    
