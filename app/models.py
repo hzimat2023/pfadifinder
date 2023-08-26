@@ -8,8 +8,11 @@ from app import login
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
+    vorname = db.Column(db.String(64))  
+    nachname = db.Column(db.String(64))  
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    pfadikinder = db.relationship('Pfadikind', backref='ersteller', lazy='dynamic')
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -24,3 +27,21 @@ class User(UserMixin, db.Model):
 @login.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+
+
+class Pfadikind(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    pfadiname = db.Column(db.String(64))
+    vegetarisch = db.Column(db.Boolean)
+    vorname = db.Column(db.String(64))
+    nachname = db.Column(db.String(64))
+    geburtsdatum = db.Column(db.Date)
+    adresse = db.Column(db.String(128))
+    telefonprivat = db.Column(db.String(20))
+    telefonberuflich = db.Column(db.String(20))
+    allergien_unvertraeglichkeiten = db.Column(db.Text)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+
+    def __repr__(self):
+        return f'<Pfadikind {self.vorname} {self.nachname}>'

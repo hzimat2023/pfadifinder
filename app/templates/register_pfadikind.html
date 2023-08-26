@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Pfadikind registrieren</h1>
+<form method="POST">
+    {{ form.hidden_tag() }}
+    <div>
+        {{ form.pfadiname.label(class="form-control-label") }}
+        {{ form.pfadiname(class="form-control") }}
+    </div>
+    <div>
+        {{ form.vegetarisch.label(class="form-check-label") }}
+        {{ form.vegetarisch(class="form-check-input") }}
+    </div>
+    <div>
+        {{ form.vorname.label(class="form-control-label") }}
+        {{ form.vorname(class="form-control") }}
+    </div>
+    <div>
+        {{ form.nachname.label(class="form-control-label") }}
+        {{ form.nachname(class="form-control") }}
+    </div>
+    <div>
+        {{ form.geburtsdatum.label(class="form-control-label") }}
+        {{ form.geburtsdatum(class="form-control") }}
+    </div>
+    <div>
+        {{ form.adresse.label(class="form-control-label") }}
+        {{ form.adresse(class="form-control") }}
+    </div>
+    <div>
+        {{ form.telefonprivat.label(class="form-control-label") }}
+        {{ form.telefonprivat(class="form-control") }}
+    </div>
+    <div>
+        {{ form.telefonberuflich.label(class="form-control-label") }}
+        {{ form.telefonberuflich(class="form-control") }}
+    </div>
+    <div>
+        {{ form.allergien_unvertraeglichkeiten.label(class="form-control-label") }}
+        {{ form.allergien_unvertraeglichkeiten(class="form-control") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Pfadikind hinzufügen</button>
+</form>
+    
+{% endblock %}

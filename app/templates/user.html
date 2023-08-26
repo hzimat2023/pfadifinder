@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+
+
+<div class="container">
+    <h1>Welcome to the Dashboard, {{ current_user.username }}!</h1>
+</br>
+    <h2>User Information</h2>
+    <p><strong>User-ID:</strong>{{ user.id }}</p>
+    <p><strong>Username:</strong> {{ current_user.username }}</p>
+    <p><strong>Vorname:</strong> {{ current_user.vorname }}</p>
+    <p><strong>Nachname:</strong> {{ current_user.nachname }}</p>
+    <p><strong>Email:</strong> {{ current_user.email }}</p>
+    <hr>
+
+    <h2>Pfadikinder</h2>
+    <ul>
+        {% for pfadikind in current_user.pfadikinder %}
+            <li>
+                <strong>Pfadiname:</strong> {{ pfadikind.pfadiname }}<br>
+                <strong>Vegetarisch:</strong> {% if pfadikind.vegetarisch %}Ja{% else %}Nein{% endif %}<br>
+                <strong>Vorname:</strong> {{ pfadikind.vorname }}<br>
+                <strong>Nachname:</strong> {{ pfadikind.nachname }}<br>
+                <strong>Geburtsdatum:</strong> {{ pfadikind.geburtsdatum }}<br>
+                <strong>Adresse:</strong> {{ pfadikind.adresse }}<br>
+                <strong>Telefon privat:</strong> {{ pfadikind.telefonprivat }}<br>
+                <strong>Telefon beruflich:</strong> {{ pfadikind.telefonberuflich }}<br>
+                <strong>Allergien/Unverträglichkeiten:</strong> {{ pfadikind.allergien_unvertraeglichkeiten }}<br>
+            </br>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+
+</div>
+
+{% endblock %}
