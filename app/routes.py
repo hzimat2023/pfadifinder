@@ -6,6 +6,8 @@ from flask import Flask, flash, render_template, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Pfadikind, Pfadilager, Pfadilageranmeldung
 from werkzeug.urls import url_parse
+from functools import wraps
+
 
 
 @app.route('/')
@@ -169,6 +171,23 @@ def anmeldung():
 
     return render_template('anmeldung.html', title='Pfadilager Anmeldung', form=form)
 
+
+
+def admin_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if current_user.role != 'admin':
+            flash('Nur Administratoren haben Zugriff auf diese Seite.', 'danger')
+            return redirect(url_for('index'))
+        return func(*args, **kwargs)
+    return decorated_view
+
+@app.route('/admin')
+@login_required
+@admin_required
+def admin_dashboard():
+    # Hier können Sie die Administrationsfunktionen hinzufügen
+    return render_template('admin_dashboard.html')
 
 
 

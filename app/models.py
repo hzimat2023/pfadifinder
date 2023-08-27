@@ -12,6 +12,7 @@ class User(UserMixin, db.Model):
     nachname = db.Column(db.String(64))  
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
+    role = db.Column(db.String(64), default='user') 
     pfadikinder = db.relationship('Pfadikind', backref='user', lazy='dynamic')
 
     def __repr__(self):
@@ -22,6 +23,7 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    
     
 
 @login.user_loader
