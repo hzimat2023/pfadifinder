@@ -1,23 +1,52 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h2>Angemeldete Pfadilager</h2>
-  <table class="table">
-    <thead>
+
+<div class="container">
+<!-- Filterformular -->
+<form method="GET">
+  <div class="form-group">
+      <label for="pfadilagerFilter">Pfadilager:</label>
+      <select class="form-control" id="pfadilagerFilter" name="pfadilager">
+          <option value="">Alle</option>
+          {% for pfadilager in pfadilager_list %}
+              <option value="{{ pfadilager.id }}">{{ pfadilager.name }}</option>
+          {% endfor %}
+      </select>
+  </div>
+
+<div class="form-group">
+<label for="datumFilter">Datum:</label>
+<select class="form-control" id="datumFilter" name="datum">
+<option value="">Alle</option>
+{% for date in pfadilager_list %}
+<option value="{{ date }}">{{ date }}</option>
+{% endfor %}
+</select>
+</div>
+</br>
+<button type="submit" class="btn btn-primary">Filtern</button>
+</form>
+</div>
+
+<div class="container">
+<h2>Anmeldungen - Pfadilager</h2>
+<table class="table">
+  <thead>
       <tr>
-        <th>Pfadilager</th>
-        <th>Datum</th>
-        <th>Vorname</th>
-        <th>Nachname</th>
-        <th>Pfadiname</th>
-        <th>Geburtsdatum</th>
-        <th>Telefon privat</th>
-        <th>Allergien/Unverträglichkeiten</th>
+          <th>Pfadilager</th>
+          <th>Datum</th>
+          <th>Vorname</th>
+          <th>Nachname</th>
+          <th>Pfadiname</th>
+          <th>Geburtsdatum</th>
+          <th>Telefon privat</th>
+          <th>Allergien/Unverträglichkeiten</th>
       </tr>
-    </thead>
-    <tbody>
+  </thead>
+  <tbody>
       {% for anmeldung in anmeldungen %}
-        <tr>
+      <tr>
           <td>{{ anmeldung.pfadilager.name }}</td>
           <td>{{ anmeldung.datum }}</td>
           <td>{{ anmeldung.vorname }}</td>
@@ -26,8 +55,9 @@
           <td>{{ anmeldung.pfadikind.geburtsdatum }}</td>
           <td>{{ anmeldung.pfadikind.telefonprivat }}</td>
           <td>{{ anmeldung.pfadikind.allergien_unvertraeglichkeiten }}</td>
-        </tr>
+      </tr>
       {% endfor %}
-    </tbody>
-  </table>
+  </tbody>
+</table>
+</div>
 {% endblock %}

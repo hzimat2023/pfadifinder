@@ -163,17 +163,37 @@ def pfadilager():
 @login_required
 @admin_required
 def admin_dashboard():
-    # Hier können Sie die Administrationsfunktionen hinzufügen
+    
     return render_template('admin_dashboard.html')
+
+
 
 
 @app.route('/angemeldete_pfadilager', methods=['GET'])
 @login_required
 def angemeldete_pfadilager():
-    # Holen Sie sich alle Pfadilageranmeldungen des aktuellen Benutzers
     anmeldungen = Pfadilageranmeldung.query.all()
     
-    return render_template('angemeldete_pfadilager.html', title='Angemeldete Pfadilager', anmeldungen=anmeldungen)
+    # Holen Sie alle Pfadilager und entfernen Sie Duplikate, um einzigartige Datumsauswahlen zu erhalten.
+    pfadilager_list = Pfadilager.query.all()
+    unique_dates = set(pfadilager.datum for pfadilager in pfadilager_list)
+
+    selected_pfadilager = request.args.get('pfadilager', default='', type=str)
+    selected_datum = request.args.get('datum', default='', type=str)
+
+    if selected_pfadilager and selected_datum:
+        # Filtern Sie die Anmeldungen nach ausgewähltem Pfadilager und Datum.
+        anmeldungen = Pfadilageranmeldung.query.filter_by(pfadilager_id=selected_pfadilager, datum=selected_datum).all()
+    elif selected_pfadilager:
+        # Filtern Sie die Anmeldungen nach ausgewähltem Pfadilager.
+        anmeldungen = Pfadilageranmeldung.query.filter_by(pfadilager_id=selected_pfadilager).all()
+    elif selected_datum:
+        # Filtern Sie die Anmeldungen nach ausgewähltem Datum.
+        anmeldungen = Pfadilageranmeldung.query.filter_by(datum=selected_datum).all()
+
+    return render_template('angemeldete_pfadilager.html', title='Angemeldete Pfadilager', anmeldungen=anmeldungen, pfadilager_list=unique_dates)
+
+
 
 
 

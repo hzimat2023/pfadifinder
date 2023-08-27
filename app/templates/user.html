@@ -49,23 +49,30 @@
 
 <div class="container">
     <hr>
-    <h2>Pfadikinder</h2>
-    <ul class="list-group">
+    <h2>Angemeldete Pfadikinder</h2>
+    <div class="row">
         {% for pfadikind in current_user.pfadikinder %}
-            <li class="list-group-item">
-                <strong>Pfadiname:</strong> {{ pfadikind.pfadiname }}<br>
-                <strong>Vegetarisch:</strong> {% if pfadikind.vegetarisch %}Ja{% else %}Nein{% endif %}<br>
-                <strong>Vorname:</strong> {{ pfadikind.vorname }}<br>
-                <strong>Nachname:</strong> {{ pfadikind.nachname }}<br>
-                <strong>Geburtsdatum:</strong> {{ pfadikind.geburtsdatum }}<br>
-                <strong>Adresse:</strong> {{ pfadikind.adresse }}<br>
-                <strong>Telefon privat:</strong> {{ pfadikind.telefonprivat }}<br>
-                <strong>Telefon beruflich:</strong> {{ pfadikind.telefonberuflich }}<br>
-                <strong>Allergien/Unverträglichkeiten:</strong> {{ pfadikind.allergien_unvertraeglichkeiten }}<br>
-            </li>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Pfadiname: {{ pfadikind.pfadiname }}</h5>
+                        <p class="card-text">
+                            <strong>Vegetarisch:</strong> {% if pfadikind.vegetarisch %}Ja{% else %}Nein{% endif %}<br>
+                            <strong>Vorname:</strong> {{ pfadikind.vorname }}<br>
+                            <strong>Nachname:</strong> {{ pfadikind.nachname }}<br>
+                            <strong>Geburtsdatum:</strong> {{ pfadikind.geburtsdatum }}<br>
+                            <strong>Adresse:</strong> {{ pfadikind.adresse }}<br>
+                            <strong>Telefon privat:</strong> {{ pfadikind.telefonprivat }}<br>
+                            <strong>Telefon beruflich:</strong> {{ pfadikind.telefonberuflich }}<br>
+                            <strong>Allergien/Unverträglichkeiten:</strong> {{ pfadikind.allergien_unvertraeglichkeiten }}<br>
+                        </p>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
+
 
 
 </br>
