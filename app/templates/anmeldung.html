@@ -2,30 +2,26 @@
 
 {% block content %}
 <div class="container">
-  <h2 class="mt-4">Pfadilager Anmeldung</h2>
+  <h2>Pfadilager Anmeldung</h2>
   <form method="POST">
-      {{ form.hidden_tag() }}
-      <div class="form-group">
-          {{ form.vorname.label(class="form-label") }}
-          {{ form.vorname(class="form-control") }}
-      </div>
-      <div class="form-group">
-          {{ form.nachname.label(class="form-label") }}
-          {{ form.nachname(class="form-control") }}
-      </div>
-      <div class="form-group">
-          {{ form.pfadiname.label(class="form-label") }}
-          {{ form.pfadiname(class="form-control") }}
-      </div>
-      <div class="form-group">
-          {{ form.pfadilager.label(class="form-label") }}
-          {{ form.pfadilager(class="form-control") }}
-      </div>
-      <div class="form-group">
-          {{ form.datum.label(class="form-label") }}
-          {{ form.datum(class="form-control") }}
-      </div>
-      <button type="submit" class="btn btn-primary">Anmelden</button>
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+      {{ form.pfadiname.label(class="form-label") }}
+      {{ form.pfadiname(class="form-control", id="pfadiname") }}
+    </div>
+    <div class="form-group">
+      {{ form.pfadilager.label(class="form-label") }}
+      {{ form.pfadilager(class="form-control", id="pfadilager") }}
+    </div>
+    <div class="form-group">
+      {{ form.vorname.label(class="form-label") }}
+      {{ form.vorname(class="form-control", id="vorname") }}
+    </div>
+    <div class="form-group">
+      {{ form.nachname.label(class="form-label") }}
+      {{ form.nachname(class="form-control", id="nachname") }}
+    </div>
+    <button type="submit" class="btn btn-primary">Anmelden</button>
   </form>
 </div>
 {% endblock %}

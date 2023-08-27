@@ -14,6 +14,8 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     role = db.Column(db.String(64), default='user') 
     pfadikinder = db.relationship('Pfadikind', backref='user', lazy='dynamic')
+    
+
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -31,7 +33,7 @@ def load_user(id):
     return User.query.get(int(id))
 
 
-pfadikinder = db.relationship('Pfadikind', backref='ersteller', lazy='dynamic')
+
 class Pfadikind(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     pfadiname = db.Column(db.String(64))
@@ -44,6 +46,8 @@ class Pfadikind(db.Model):
     telefonberuflich = db.Column(db.String(20))
     allergien_unvertraeglichkeiten = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+  
+
 
     def __repr__(self):
         return f'<Pfadikind {self.vorname} {self.nachname}>'
@@ -54,7 +58,10 @@ class Pfadilager(db.Model):
     name = db.Column(db.String(100), nullable=False)
     datum = db.Column(db.String(50), nullable=False)
     
+    
 
+
+   
 class Pfadilageranmeldung(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
@@ -64,6 +71,6 @@ class Pfadilageranmeldung(db.Model):
     nachname = db.Column(db.String(64))  
 
     user = db.relationship('User', backref='pfadilager_anmeldungen')
-    pfadilager = db.relationship('Pfadilager', backref='pfadilager_anmeldungen')
+    pfadilager = db.relationship('Pfadilager', backref='anmeldungen')
     pfadikind_id = db.Column(db.Integer, db.ForeignKey('pfadikind.id'), nullable=True)  
     pfadikind = db.relationship('Pfadikind', backref='pfadilager_anmeldung', foreign_keys=[pfadikind_id])

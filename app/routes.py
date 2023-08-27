@@ -156,37 +156,6 @@ def pfadilager():
 
 
 
-@app.route('/anmeldung', methods=['GET', 'POST'])
-@login_required
-def anmeldung():
-    form = PfadikindAnmeldungForm()
-    form.pfadikind.choices = [(pfadikind.id, pfadikind.vorname) for pfadikind in Pfadikind.query.all()]
-    form.pfadilager.choices = [(pfadilager.id, pfadilager.name) for pfadilager in Pfadilager.query.all()]
-    form.pfadiname.choices = [(pfadikind.pfadiname, pfadikind.pfadiname) for pfadikind in Pfadikind.query.all()]
-
-    if form.validate_on_submit():
-        selected_pfadilager_id = form.pfadilager.data
-        selected_pfadilager = Pfadilager.query.get(selected_pfadilager_id)
-        datum = selected_pfadilager.datum
-
-        anmeldung = Pfadilageranmeldung(
-            user_id=current_user.id,
-            pfadilager_id=selected_pfadilager_id,
-            datum=datum,
-            vorname=form.vorname.data,  
-            nachname=form.nachname.data, 
-            pfadikind_id=form.pfadiname.data  
-        )
-
-        db.session.add(anmeldung)
-        db.session.commit()
-        flash('Du hast dich erfolgreich für das Pfadilager angemeldet.', 'success')
-        return redirect(url_for('index'))
-
-    return render_template('anmeldung.html', title='Pfadilager Anmeldung', form=form)
-
-
-
 
 
 
@@ -198,6 +167,44 @@ def admin_dashboard():
     return render_template('admin_dashboard.html')
 
 
+@app.route('/angemeldete_pfadilager', methods=['GET'])
+@login_required
+def angemeldete_pfadilager():
+    # Holen Sie sich alle Pfadilageranmeldungen des aktuellen Benutzers
+    anmeldungen = Pfadilageranmeldung.query.all()
+    
+    return render_template('angemeldete_pfadilager.html', title='Angemeldete Pfadilager', anmeldungen=anmeldungen)
 
 
 
+
+
+@app.route('/anmeldung', methods=['GET', 'POST'])
+@login_required
+def anmeldung():
+    form = PfadikindAnmeldungForm()
+    form.pfadiname.choices = [(str(pfadikind.id), pfadikind.pfadiname) for pfadikind in Pfadikind.query.filter_by(user_id=current_user.id).all()]
+    form.pfadilager.choices = [(pfadilager.id, pfadilager.name) for pfadilager in Pfadilager.query.all()]
+    form.vorname.choices = [(pfadikind.vorname, pfadikind.vorname) for pfadikind in Pfadikind.query.filter_by(user_id=current_user.id).all()]
+    form.nachname.choices = [(pfadikind.nachname, pfadikind.nachname) for pfadikind in Pfadikind.query.filter_by(user_id=current_user.id).all()]
+
+    if form.validate_on_submit():
+        selected_pfadilager_id = form.pfadilager.data
+        selected_pfadilager = Pfadilager.query.get(selected_pfadilager_id)
+        datum = selected_pfadilager.datum
+
+        anmeldung = Pfadilageranmeldung(
+            user_id=current_user.id,
+            pfadilager_id=selected_pfadilager_id,
+            datum=datum,
+            vorname=form.vorname.data,
+            nachname=form.nachname.data,  
+            pfadikind_id=form.pfadiname.data  
+        )
+
+        db.session.add(anmeldung)
+        db.session.commit()
+        flash('Du hast dich erfolgreich für das Pfadilager angemeldet.', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('anmeldung.html', title='Pfadilager Anmeldung', form=form)

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Angemeldete Pfadilager</h2>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Pfadilager</th>
+        <th>Datum</th>
+        <th>Vorname</th>
+        <th>Nachname</th>
+        <th>Pfadiname</th>
+        <th>Geburtsdatum</th>
+        <th>Telefon privat</th>
+        <th>Allergien/Unverträglichkeiten</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for anmeldung in anmeldungen %}
+        <tr>
+          <td>{{ anmeldung.pfadilager.name }}</td>
+          <td>{{ anmeldung.datum }}</td>
+          <td>{{ anmeldung.vorname }}</td>
+          <td>{{ anmeldung.nachname }}</td>
+          <td>{{ anmeldung.pfadikind.pfadiname }}</td>
+          <td>{{ anmeldung.pfadikind.geburtsdatum }}</td>
+          <td>{{ anmeldung.pfadikind.telefonprivat }}</td>
+          <td>{{ anmeldung.pfadikind.allergien_unvertraeglichkeiten }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
