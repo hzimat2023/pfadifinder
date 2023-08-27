@@ -9,6 +9,15 @@ from werkzeug.urls import url_parse
 from functools import wraps
 
 
+def admin_required(func):
+    @wraps(func)
+    def decorated_view(*args, **kwargs):
+        if current_user.role != 'admin':
+            flash('Nur Administratoren haben Zugriff auf diese Seite.', 'danger')
+            return redirect(url_for('index'))
+        return func(*args, **kwargs)
+    return decorated_view
+
 
 @app.route('/')
 @app.route('/index')
@@ -16,6 +25,7 @@ from functools import wraps
 def index():
     user = current_user 
     pfadilager_entries = Pfadilager.query.all()
+    
 
     return render_template('index.html', title='Home', user=user, pfadilager_entries=pfadilager_entries)
 
@@ -69,7 +79,7 @@ def register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    pfadilageranmeldungen = Pfadilageranmeldung.query.all()
+    pfadilageranmeldungen = Pfadilageranmeldung.query.filter_by(user_id=current_user.id).all()
 
     return render_template('user.html', user=user, pfadilageranmeldungen=pfadilageranmeldungen)
 
@@ -85,14 +95,14 @@ def internal_error(error):
 
 
 @app.route('/register_pfadikind', methods=['GET', 'POST'])
-@login_required  # Stellen Sie sicher, dass der Benutzer authentifiziert ist
+@login_required 
 def register_pfadikind():
     form = PfadikindForm()
     if form.validate_on_submit():
-        # Hier erhalten Sie die ID des angemeldeten Benutzers
+  
         user_id = current_user.id
 
-        # Erstellen Sie ein neues Pfadikind und weisen Sie die user_id zu
+       
         pfadikind = Pfadikind(
             pfadiname=form.pfadiname.data,
             vegetarisch=form.vegetarisch.data,
@@ -103,10 +113,10 @@ def register_pfadikind():
             telefonprivat=form.telefonprivat.data,
             telefonberuflich=form.telefonberuflich.data,
             allergien_unvertraeglichkeiten=form.allergien_unvertraeglichkeiten.data,
-            user_id=user_id  # Weisen Sie die user_id zu
+            user_id=user_id  
         )
 
-        # Fügen Sie das Pfadikind zur Datenbank hinzu und speichern Sie es
+
         db.session.add(pfadikind)
         db.session.commit()
 
@@ -117,6 +127,8 @@ def register_pfadikind():
 
 
 @app.route('/create_pfadilager', methods=['GET', 'POST'])
+@login_required
+@admin_required
 def create_pfadilager():
     form = PfadiLagerForm()
     if form.validate_on_submit():
@@ -150,6 +162,7 @@ def anmeldung():
     form = PfadikindAnmeldungForm()
     form.pfadikind.choices = [(pfadikind.id, pfadikind.vorname) for pfadikind in Pfadikind.query.all()]
     form.pfadilager.choices = [(pfadilager.id, pfadilager.name) for pfadilager in Pfadilager.query.all()]
+    form.pfadiname.choices = [(pfadikind.pfadiname, pfadikind.pfadiname) for pfadikind in Pfadikind.query.all()]
 
     if form.validate_on_submit():
         selected_pfadilager_id = form.pfadilager.data
@@ -160,8 +173,9 @@ def anmeldung():
             user_id=current_user.id,
             pfadilager_id=selected_pfadilager_id,
             datum=datum,
-            vorname=form.vorname.data,  # Add vorname field
-            nachname=form.nachname.data  # Add nachname field
+            vorname=form.vorname.data,  
+            nachname=form.nachname.data, 
+            pfadikind_id=form.pfadiname.data  
         )
 
         db.session.add(anmeldung)
@@ -173,16 +187,10 @@ def anmeldung():
 
 
 
-def admin_required(func):
-    @wraps(func)
-    def decorated_view(*args, **kwargs):
-        if current_user.role != 'admin':
-            flash('Nur Administratoren haben Zugriff auf diese Seite.', 'danger')
-            return redirect(url_for('index'))
-        return func(*args, **kwargs)
-    return decorated_view
 
-@app.route('/admin')
+
+
+@app.route('/admin/dashboard')
 @login_required
 @admin_required
 def admin_dashboard():

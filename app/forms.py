@@ -56,6 +56,7 @@ class PfadikindAnmeldungForm(FlaskForm):
     vorname = StringField('Vorname', validators=[DataRequired()])
     nachname = StringField('Nachname', validators=[DataRequired()])
     pfadikind = SelectField('Pfadikind', validators=[DataRequired()])
+    pfadiname = SelectField('Pfadiname', validators=[DataRequired()])
     pfadilager = SelectField('Pfadilager', validators=[DataRequired()])
     datum = StringField('Datum (MM/YYYY)', validators=[DataRequired()])
     submit = SubmitField('Anmelden')

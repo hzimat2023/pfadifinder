@@ -2,35 +2,30 @@
 
 {% block content %}
 <div class="container">
-  <h2 class="mt-4">Pfadikind Anmeldung</h2>
+  <h2 class="mt-4">Pfadilager Anmeldung</h2>
   <form method="POST">
-    {{ form.hidden_tag() }}
-    <div class="form-group">
-      {{ form.vorname.label(class="form-control-label") }}
-      {{ form.vorname(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.nachname.label(class="form-control-label") }}
-      {{ form.nachname(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.pfadikind.label(class="form-control-label") }}
-      {{ form.pfadikind(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.pfadilager.label(class="form-control-label") }}
-      {{ form.pfadilager(class="form-control") }}
-    </div>
-    <div class="form-group">
-      {{ form.datum.label(class="form-control-label") }}
-      <div class="input-group">
-        {{ form.datum(class="form-control", placeholder="MM/YYYY") }}
-        <div class="input-group-append">
-          <span class="input-group-text"><i class="fas fa-calendar"></i></span>
-        </div>
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+          {{ form.vorname.label(class="form-label") }}
+          {{ form.vorname(class="form-control") }}
       </div>
-    </div>
-    <button type="submit" class="btn btn-primary">{{ form.submit.label }}</button>
+      <div class="form-group">
+          {{ form.nachname.label(class="form-label") }}
+          {{ form.nachname(class="form-control") }}
+      </div>
+      <div class="form-group">
+          {{ form.pfadiname.label(class="form-label") }}
+          {{ form.pfadiname(class="form-control") }}
+      </div>
+      <div class="form-group">
+          {{ form.pfadilager.label(class="form-label") }}
+          {{ form.pfadilager(class="form-control") }}
+      </div>
+      <div class="form-group">
+          {{ form.datum.label(class="form-label") }}
+          {{ form.datum(class="form-control") }}
+      </div>
+      <button type="submit" class="btn btn-primary">Anmelden</button>
   </form>
 </div>
 {% endblock %}
