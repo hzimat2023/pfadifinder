@@ -66,4 +66,34 @@
         {% endfor %}
     </ul>
 </div>
+
+
+</br>
+<div class="container">
+    <h2 class="mt-4">Pfadilageranmeldungen</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>User</th>
+          <th>Pfadilager</th>
+          <th>Datum</th>
+          <th>Vorname</th>
+          <th>Nachname</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for anmeldung in pfadilageranmeldungen %}
+          <tr>
+            <td>{{ anmeldung.user.username }}</td>
+            <td>{{ anmeldung.pfadilager.name }}</td>
+            <td>{{ anmeldung.datum }}</td>
+            <td>{{ anmeldung.vorname }}</td>
+            <td>{{ anmeldung.nachname }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+
 {% endblock %}

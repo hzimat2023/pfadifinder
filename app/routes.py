@@ -1,10 +1,10 @@
 
 from app import db
 from app import app
-from app.forms import LoginForm, PfadikindForm, RegistrationForm, PfadiLagerForm
+from app.forms import LoginForm, PfadikindForm, RegistrationForm, PfadiLagerForm, PfadikindAnmeldungForm
 from flask import Flask, flash, render_template, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
-from app.models import User, Pfadikind, Pfadilager
+from app.models import User, Pfadikind, Pfadilager, Pfadilageranmeldung
 from werkzeug.urls import url_parse
 
 
@@ -67,11 +67,9 @@ def register():
 @login_required
 def user(username):
     user = User.query.filter_by(username=username).first_or_404()
-    posts = [
-        {'author': user, 'body': 'Test post #1'},
-        {'author': user, 'body': 'Test post #2'}
-    ]
-    return render_template('user.html', user=user, posts=posts)
+    pfadilageranmeldungen = Pfadilageranmeldung.query.all()
+
+    return render_template('user.html', user=user, pfadilageranmeldungen=pfadilageranmeldungen)
 
 
 @app.errorhandler(404)
@@ -141,3 +139,38 @@ def pfadilager():
     lager_list = Pfadilager.query.all()
 
     return render_template('pfadilager.html', lager_list=lager_list)
+
+
+
+@app.route('/anmeldung', methods=['GET', 'POST'])
+@login_required
+def anmeldung():
+    form = PfadikindAnmeldungForm()
+    form.pfadikind.choices = [(pfadikind.id, pfadikind.vorname) for pfadikind in Pfadikind.query.all()]
+    form.pfadilager.choices = [(pfadilager.id, pfadilager.name) for pfadilager in Pfadilager.query.all()]
+
+    if form.validate_on_submit():
+        selected_pfadilager_id = form.pfadilager.data
+        selected_pfadilager = Pfadilager.query.get(selected_pfadilager_id)
+        datum = selected_pfadilager.datum
+
+        anmeldung = Pfadilageranmeldung(
+            user_id=current_user.id,
+            pfadilager_id=selected_pfadilager_id,
+            datum=datum,
+            vorname=form.vorname.data,  # Add vorname field
+            nachname=form.nachname.data  # Add nachname field
+        )
+
+        db.session.add(anmeldung)
+        db.session.commit()
+        flash('Du hast dich erfolgreich für das Pfadilager angemeldet.', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('anmeldung.html', title='Pfadilager Anmeldung', form=form)
+
+
+
+
+
+
