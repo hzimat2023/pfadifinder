@@ -2,11 +2,12 @@
 from app import db
 from app import app
 from app.forms import LoginForm, PfadikindForm, RegistrationForm, PfadiLagerForm, PfadikindAnmeldungForm
-from flask import Flask, flash, render_template, redirect, url_for, request
+from flask import Flask, flash, render_template, redirect, url_for, request, Response
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User, Pfadikind, Pfadilager, Pfadilageranmeldung
 from werkzeug.urls import url_parse
 from functools import wraps
+import pandas as pd
 
 
 def admin_required(func):
@@ -122,7 +123,7 @@ def register_pfadikind():
 
         flash('Pfadikind wurde erfolgreich hinzugefügt!')
         return redirect(url_for('index'))
-    return render_template('register_pfadikind.html', title='Pfadikind registrieren', form=form)
+    return render_template('register_pfadikind.html', title='Pfadikind registrieren', form=form,)
 
 
 
@@ -155,10 +156,6 @@ def pfadilager():
     return render_template('pfadilager.html', lager_list=lager_list)
 
 
-
-
-
-
 @app.route('/admin/dashboard')
 @login_required
 @admin_required
@@ -174,7 +171,6 @@ def admin_dashboard():
 def angemeldete_pfadilager():
     anmeldungen = Pfadilageranmeldung.query.all()
     
-    # Holen Sie alle Pfadilager und entfernen Sie Duplikate, um einzigartige Datumsauswahlen zu erhalten.
     pfadilager_list = Pfadilager.query.all()
     unique_dates = set(pfadilager.datum for pfadilager in pfadilager_list)
 
@@ -182,16 +178,14 @@ def angemeldete_pfadilager():
     selected_datum = request.args.get('datum', default='', type=str)
 
     if selected_pfadilager and selected_datum:
-        # Filtern Sie die Anmeldungen nach ausgewähltem Pfadilager und Datum.
         anmeldungen = Pfadilageranmeldung.query.filter_by(pfadilager_id=selected_pfadilager, datum=selected_datum).all()
     elif selected_pfadilager:
-        # Filtern Sie die Anmeldungen nach ausgewähltem Pfadilager.
         anmeldungen = Pfadilageranmeldung.query.filter_by(pfadilager_id=selected_pfadilager).all()
     elif selected_datum:
-        # Filtern Sie die Anmeldungen nach ausgewähltem Datum.
         anmeldungen = Pfadilageranmeldung.query.filter_by(datum=selected_datum).all()
 
     return render_template('angemeldete_pfadilager.html', title='Angemeldete Pfadilager', anmeldungen=anmeldungen, pfadilager_list=unique_dates)
+
 
 
 
@@ -228,3 +222,66 @@ def anmeldung():
         return redirect(url_for('index'))
 
     return render_template('anmeldung.html', title='Pfadilager Anmeldung', form=form)
+
+
+
+
+
+
+
+@app.route('/export_csv')
+def export_csv():
+    anmeldungen = Pfadilageranmeldung.query.all()
+    
+    df = pd.DataFrame([{
+        'Pfadilager': anmeldung.pfadilager.name,
+        'Datum': anmeldung.datum,
+        'Vorname': anmeldung.vorname,
+        'Nachname': anmeldung.nachname,
+        'Pfadiname': anmeldung.pfadikind.pfadiname,
+        'Geburtsdatum': anmeldung.pfadikind.geburtsdatum,
+        'Telefon privat': anmeldung.pfadikind.telefonprivat,
+        'Allergien/Unverträglichkeiten': anmeldung.pfadikind.allergien_unvertraeglichkeiten
+    } for anmeldung in anmeldungen])
+
+    
+    csv_data = df.to_csv(index=False)
+
+    response = Response(csv_data, mimetype='text/csv')
+    response.headers['Content-Disposition'] = 'attachment; filename=anmeldungen.csv'
+
+    return response
+
+#
+
+
+@app.route('/edit_pfadikind/<int:pfadikind_id>', methods=['GET', 'POST'])
+def edit_pfadikind(pfadikind_id):
+    pfadikind = Pfadikind.query.get_or_404(pfadikind_id)
+    form = PfadikindForm(obj=pfadikind)
+
+    if form.validate_on_submit():
+        
+        form.populate_obj(pfadikind)
+
+       
+        db.session.commit()
+        flash('updated successfully.', 'success')
+        return redirect(url_for('edit_pfadikind', pfadikind_id=pfadikind.id))
+
+    return render_template('edit_pfadikind.html', form=form, pfadikind=pfadikind)
+
+
+@app.route('/anmeldung/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_anmeldung(id):
+    anmeldung = Pfadilageranmeldung.query.get_or_404(id)
+    
+    
+    if anmeldung.user_id != current_user.id:
+        abort(404)  
+    db.session.delete(anmeldung)
+    db.session.commit()
+    
+    flash('Anmeldung deleted successfully.', 'success')
+    return redirect(url_for('index', username=current_user.username))

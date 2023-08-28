@@ -1,5 +1,9 @@
 {% extends "base.html" %}
-
+{% block head %}
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% endblock %}
 {% block content %}
 
 <div class="container">
@@ -27,6 +31,9 @@
 </br>
 <button type="submit" class="btn btn-primary">Filtern</button>
 </form>
+</br>
+<a href="{{ url_for('export_csv') }}" class="btn btn-primary">Export CSV</a>
+
 </div>
 
 <div class="container">

@@ -66,16 +66,19 @@
                             <strong>Telefon beruflich:</strong> {{ pfadikind.telefonberuflich }}<br>
                             <strong>Allergien/Unverträglichkeiten:</strong> {{ pfadikind.allergien_unvertraeglichkeiten }}<br>
                         </p>
+                    
+                        <a href="{{ url_for('edit_pfadikind', pfadikind_id=pfadikind.id) }}" class="btn btn-warning">Bearbeiten</a>
                     </div>
                 </div>
             </div>
         {% endfor %}
     </div>
 </div>
-
-
-
 </br>
+
+
+
+
 <div class="container">
     <h2 class="mt-4">Pfadilageranmeldungen</h2>
     <table class="table table-striped">
@@ -86,6 +89,8 @@
           <th>Datum</th>
           <th>Vorname</th>
           <th>Nachname</th>
+          <th>Pfadiname</th>
+          <th>Action</th> <!-- Add a new table header for the "Delete" action -->
         </tr>
       </thead>
       <tbody>
@@ -96,6 +101,12 @@
             <td>{{ anmeldung.datum }}</td>
             <td>{{ anmeldung.vorname }}</td>
             <td>{{ anmeldung.nachname }}</td>
+            <td>{{ anmeldung.pfadikind.pfadiname }}</td>
+            <td>
+                <form method="POST" action="{{ url_for('delete_anmeldung', id=anmeldung.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
           </tr>
         {% endfor %}
       </tbody>

@@ -14,6 +14,10 @@
       {{ form.pfadilager(class="form-control", id="pfadilager") }}
     </div>
     <div class="form-group">
+      {{ form.datum.label(class="form-label") }}
+      {{ form.datum(class="form-control") }}
+  </div>
+    <div class="form-group">
       {{ form.vorname.label(class="form-label") }}
       {{ form.vorname(class="form-control", id="vorname") }}
     </div>
@@ -23,5 +27,7 @@
     </div>
     <button type="submit" class="btn btn-primary">Anmelden</button>
   </form>
+
+  
 </div>
 {% endblock %}
