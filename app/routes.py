@@ -241,7 +241,11 @@ def export_csv():
         'Pfadiname': anmeldung.pfadikind.pfadiname,
         'Geburtsdatum': anmeldung.pfadikind.geburtsdatum,
         'Telefon privat': anmeldung.pfadikind.telefonprivat,
+        'Vegetarisch': anmeldung.pfadikind.vegetarisch,
         'Allergien/Unverträglichkeiten': anmeldung.pfadikind.allergien_unvertraeglichkeiten
+        
+   
+
     } for anmeldung in anmeldungen])
 
     

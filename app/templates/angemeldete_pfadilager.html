@@ -48,7 +48,10 @@
           <th>Pfadiname</th>
           <th>Geburtsdatum</th>
           <th>Telefon privat</th>
+          <th>vegetarisch</th>
           <th>Allergien/Unverträglichkeiten</th>
+     
+
       </tr>
   </thead>
   <tbody>
@@ -61,6 +64,7 @@
           <td>{{ anmeldung.pfadikind.pfadiname }}</td>
           <td>{{ anmeldung.pfadikind.geburtsdatum }}</td>
           <td>{{ anmeldung.pfadikind.telefonprivat }}</td>
+          <td>{{ anmeldung.pfadikind.vegetarisch }}</td>
           <td>{{ anmeldung.pfadikind.allergien_unvertraeglichkeiten }}</td>
       </tr>
       {% endfor %}
