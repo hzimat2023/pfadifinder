@@ -2,6 +2,7 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login
+from flask_sqlalchemy import SQLAlchemy
 
 
 
@@ -74,3 +75,5 @@ class Pfadilageranmeldung(db.Model):
     pfadilager = db.relationship('Pfadilager', backref='anmeldungen')
     pfadikind_id = db.Column(db.Integer, db.ForeignKey('pfadikind.id'), nullable=True)  
     pfadikind = db.relationship('Pfadikind', backref='pfadilager_anmeldung', foreign_keys=[pfadikind_id])
+
+
